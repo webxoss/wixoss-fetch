@@ -1,0 +1,11 @@
+﻿{
+  "name": "WIXOSS_Fetch",
+  "manifest_version": 2,
+  "version": "0.0.1",
+  "permissions": ["*://*/*"],
+  "app": {
+    "launch": {
+      "local_path": "index.html"
+    }
+  }
+}
