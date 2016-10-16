@@ -5,9 +5,9 @@ const Tar = require('tar-js')
 
 /* utils */
 const toArr = obj => {
-	if (!obj) return []
-	if (typeof obj === 'string') return []
-	return Array.prototype.slice.call(obj,0)
+  if (!obj) return []
+  if (typeof obj === 'string') return []
+  return Array.prototype.slice.call(obj,0)
 }
 const $fetch = (...arg) => {
   return fetch(arg).then(res => {
@@ -21,24 +21,24 @@ const stringToUint8 = str => {
 
 /* parser */
 function toCardType(str) {
-	let map = {
-		'ルリグ': 'LRIG',
-		'アーツ': 'ARTS',
-		'シグニ': 'SIGNI',
-		'スペル': 'SPELL',
-	}
-	return map[str] || str
+  let map = {
+    'ルリグ': 'LRIG',
+    'アーツ': 'ARTS',
+    'シグニ': 'SIGNI',
+    'スペル': 'SPELL',
+  }
+  return map[str] || str
 }
 function toColor(str) {
-	let map = {
-		'白': 'WHITE',
-		'黒': 'BLACK',
-		'赤': 'RED',
-		'青': 'BLUE',
-		'緑': 'GREEN',
-		'無': 'COLORLESS',
-	}
-	return map[str] || str
+  let map = {
+    '白': 'WHITE',
+    '黒': 'BLACK',
+    '赤': 'RED',
+    '青': 'BLUE',
+    '緑': 'GREEN',
+    '無': 'COLORLESS',
+  }
+  return map[str] || str
 }
 function toCardText(el) {
   let text = toArr(el.childNodes).map(node => {
@@ -55,48 +55,48 @@ function toCardText(el) {
   }).join('')
 }
 function toFaq(el) {
-	let faq = {}
-	faq.q = el.querySelector('.card_ruleFAQ_q').textContent.replace(/^\s+/,'').replace(/\s+$/,'')
-	faq.a = el.querySelector('.card_ruleFAQ_a').textContent.replace(/^\s+/,'').replace(/\s+$/,'')
-	return faq
+  let faq = {}
+  faq.q = el.querySelector('.card_ruleFAQ_q').textContent.replace(/^\s+/,'').replace(/\s+$/,'')
+  faq.a = el.querySelector('.card_ruleFAQ_a').textContent.replace(/^\s+/,'').replace(/\s+$/,'')
+  return faq
 }
 
 
 function toInfo(doc, id) {
-	let info = {}
-	info.pid = id
-	info.timestamp = Date.now()
-	info.wxid = doc.querySelector('.card_detail_title > p').textContent
-	info.name = doc.querySelector('.card_detail_title > h3').firstChild.textContent
-	info.kana = doc.querySelector('.card_detail_kana').textContent.slice(1,-1)
-	info.rarity = doc.querySelector('.card_rarity').textContent.replace(/\s/g,'')
+  let info = {}
+  info.pid = id
+  info.timestamp = Date.now()
+  info.wxid = doc.querySelector('.card_detail_title > p').textContent
+  info.name = doc.querySelector('.card_detail_title > h3').firstChild.textContent
+  info.kana = doc.querySelector('.card_detail_kana').textContent.slice(1,-1)
+  info.rarity = doc.querySelector('.card_rarity').textContent.replace(/\s/g,'')
 
-	let trs = doc.querySelectorAll('.card_date_box tr')
-	// info.cardType = toCardType(trs[0].children[1].textContent)
-	info.cardType = trs[0].children[1].textContent
-	info.class = trs[0].children[3].textContent
-	// info.color = toColor(trs[1].children[1].textContent)
-	info.color = trs[1].children[1].textContent
-	info.level = trs[1].children[3].textContent
-	info.growCost = trs[2].children[1].textContent
-	info.cost = trs[2].children[3].textContent
-	info.limit = trs[3].children[1].textContent
-	info.power = trs[3].children[3].textContent
-	info.limiting = trs[4].children[1].textContent
-	info.guard = trs[4].children[3].textContent
+  let trs = doc.querySelectorAll('.card_date_box tr')
+  // info.cardType = toCardType(trs[0].children[1].textContent)
+  info.cardType = trs[0].children[1].textContent
+  info.class = trs[0].children[3].textContent
+  // info.color = toColor(trs[1].children[1].textContent)
+  info.color = trs[1].children[1].textContent
+  info.level = trs[1].children[3].textContent
+  info.growCost = trs[2].children[1].textContent
+  info.cost = trs[2].children[3].textContent
+  info.limit = trs[3].children[1].textContent
+  info.power = trs[3].children[3].textContent
+  info.limiting = trs[4].children[1].textContent
+  info.guard = trs[4].children[3].textContent
 
-	let el = doc.querySelector('.card_skill')
-	info.cardSkill = el? toCardText(el) : ''
+  let el = doc.querySelector('.card_skill')
+  info.cardSkill = el? toCardText(el) : ''
 
-	info.cardTexts = toArr(doc.querySelectorAll('.card_text:not(.card_skill)')).map(toCardText)
+  info.cardTexts = toArr(doc.querySelectorAll('.card_text:not(.card_skill)')).map(toCardText)
 
-	// info.imgUrl = domain + doc.querySelector('.card_img > img').getAttribute('src')
-	info.imgUrl = doc.querySelector('.card_img > img').getAttribute('src')
-	info.illust = doc.querySelector('.card_img').textContent.match(/Illust (.*)$/)[1]
+  // info.imgUrl = domain + doc.querySelector('.card_img > img').getAttribute('src')
+  info.imgUrl = doc.querySelector('.card_img > img').getAttribute('src')
+  info.illust = doc.querySelector('.card_img').textContent.match(/Illust (.*)$/)[1]
 
-	info.faqs = toArr(doc.querySelectorAll('.card_FAQ > p')).map(toFaq)
+  info.faqs = toArr(doc.querySelectorAll('.card_FAQ > p')).map(toFaq)
 
-	return info
+  return info
 }
 
 /* fetch */
