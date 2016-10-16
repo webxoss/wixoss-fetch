@@ -4,8 +4,15 @@ Fetch WIXOSS card data (html pages, card pictures, and raw data as jsons) from t
 
 ## Usage
 
-1. Add project folder as a Chrome App in chrome://extensions/ .
+1. Add `./dist` folder as a Chrome App in chrome://extensions/ .
 
 2. Open the App in chrome://apps/ .
 
-3. In console, run `getRange(from, to)`. `from` and `to` are integer card ids.
+3. In console, run `fetchRange(from, to)`. `from` and `to` are integer card ids.
+
+## dev
+
+```
+npm install
+npm run build
+```

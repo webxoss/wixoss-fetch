@@ -15,8 +15,18 @@
   "devDependencies": {
     "browserify": "^13.0.0",
     "del": "^2.2.0",
+    "gulp": "^3.9.1",
     "gulp-sourcemaps": "^2.0.0-alpha",
+    "tar-js": "^0.3.0",
     "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream": "^1.1.0"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/webxoss/wixoss-fetch.git"
+  },
+  "bugs": {
+    "url": "https://github.com/webxoss/wixoss-fetch/issues"
+  },
+  "homepage": "https://github.com/webxoss/wixoss-fetch#readme"
 }
