@@ -1,0 +1,22 @@
+{
+  "name": "wixoss-fetch",
+  "version": "0.0.1",
+  "description": "Fetch WIXOSS card data from the official site.",
+  "main": "index.js",
+  "scripts": {
+    "build": "gulp build"
+  },
+  "keywords": [
+    "wixoss",
+    "tcg"
+  ],
+  "author": "WEBXOSS <webxoss@gmail.com> (https://twitter.com/WEBXOSS)",
+  "license": "MIT",
+  "devDependencies": {
+    "browserify": "^13.0.0",
+    "del": "^2.2.0",
+    "gulp-sourcemaps": "^2.0.0-alpha",
+    "vinyl-buffer": "^1.0.0",
+    "vinyl-source-stream": "^1.1.0"
+  }
+}
