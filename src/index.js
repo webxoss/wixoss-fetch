@@ -92,7 +92,8 @@ function toInfo(doc, id) {
 
   // info.imgUrl = domain + doc.querySelector('.card_img > img').getAttribute('src')
   info.imgUrl = doc.querySelector('.card_img > img').getAttribute('src')
-  info.illust = doc.querySelector('.card_img').textContent.match(/Illust (.*)$/)[1]
+  info.illust = (doc.querySelector('.card_img').textContent.match(/Illust (.*)$/) || [])[1] || ''
+  if (!info.illust) console.warn(`${info.pid}: no illust!`)
 
   info.faqs = toArr(doc.querySelectorAll('.card_FAQ > p')).map(toFaq)
 
