@@ -53,6 +53,7 @@ function toCardText(el) {
     }
     return node.textContent
   }).join('')
+  return text
 }
 function toFaq(el) {
   let faq = {}
