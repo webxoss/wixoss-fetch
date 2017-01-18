@@ -84,7 +84,15 @@ function toInfo(doc, id) {
   info.limit = trs[3].children[1].textContent
   info.power = trs[3].children[3].textContent
   info.limiting = trs[4].children[1].textContent
-  info.guard = trs[4].children[3].textContent
+
+  // guard or limiting
+  if (trs[4].children[2].textContent === 'ガード') {
+    info.guard = trs[4].children[3].textContent
+    info.timing = '-'
+  } else {
+    info.guard = '-'
+    info.timing = trs[4].children[3].textContent
+  }
 
   let el = doc.querySelector('.card_skill')
   info.cardSkill = el? toCardText(el) : ''
