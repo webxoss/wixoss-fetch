@@ -46,7 +46,7 @@ function toCardText(el) {
       return node.nodeValue.replace(/^\s+/,'').replace(/\s+$/,'')
     }
     if (node.nodeName === 'IMG') {
-      return '【' + node.alt + '】'
+      return node.alt
     }
     if (node.nodeName === 'BR') {
       return '\n'
@@ -85,13 +85,21 @@ function toInfo(doc, id) {
   info.power = trs[3].children[3].textContent
   info.limiting = trs[4].children[1].textContent
 
-  // guard or limiting
-  if (trs[4].children[2].textContent === 'ガード') {
-    info.guard = trs[4].children[3].textContent
+  // guard, limiting or coin
+  let key = trs[4].children[2].textContent
+  let value = trs[4].children[3].textContent
+  if (key === 'ガード') {
+    info.guard = value
     info.timing = '-'
-  } else {
+  } else if (key === '使用タイミング') {
     info.guard = '-'
-    info.timing = trs[4].children[3].textContent
+    info.timing = value
+  } else if (key === 'コイン') {
+    info.guard = '-'
+    info.timing = '-'
+    info.coin = value
+  } else {
+    console.warn(`${info.pid}: unknown key "${key}"!`)
   }
 
   let el = doc.querySelector('.card_skill')
