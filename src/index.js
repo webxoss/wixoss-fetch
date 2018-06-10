@@ -65,7 +65,7 @@ function toFaq(el) {
 
 function toInfo(doc, id) {
   let info = {}
-  info.pid = id
+  info.pid = id || doc.querySelector('.card_detail_title > p').textContent
   info.timestamp = Date.now()
   info.wxid = doc.querySelector('.card_detail_title > p').textContent
   info.name = doc.querySelector('.card_detail_title > h3').firstChild.textContent
@@ -120,6 +120,15 @@ function toInfo(doc, id) {
 /* fetch */
 function fetchById (tar, i) {
   let url = `http://${domain}/products/wixoss/card/card_detail.php?card_id=${i}`
+  return fetchByUrl(tar, url, i)
+}
+
+function fetchByWXId(tar, wx_id) {
+  let url = `http://${domain}/products/wixoss/card/card_list.php?card=card_detail&card_no=${wx_id}`
+  return fetchByUrl(tar, url, undefined)
+}
+
+function fetchByUrl(tar, url, i) {
   return $fetch(url)
   .then(res => res.text())
   .then(html => {
@@ -161,6 +170,21 @@ function fetchRange(min, max) {
   })
 }
 
+// fetchWXBox("WDK02", 1, 20)
+function fetchWXBox(prefix, min, max) {
+  let tar = new Tar()
+  let promises = []
+  for (let i = min; i <= max; i ++) {
+    const wx_id = `${prefix}-${('00' + i).slice(-3)}`;
+    promises.push(fetchByWXId(tar, wx_id))
+  }
+  return Promise.all(promises)
+  .then(() => {
+    let name = ('000' + min).slice(-4) + '-' + ('000' + max).slice(-4)
+    downloadTar(tar, name)
+  })
+}
+
 function downloadTar(tar, name) {
   let blob = new Blob([tar.out], { type: 'application/octet-stream' })
   let url = URL.createObjectURL(blob)
@@ -171,3 +195,4 @@ function downloadTar(tar, name) {
 }
 
 window.fetchRange = fetchRange
+window.fetchWXBox = fetchWXBox

@@ -1,4 +1,4 @@
-(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+(function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
 /*
  * tar-js
  * MIT (c) 2011 T. Jameson Little
@@ -434,7 +434,7 @@ function toFaq(el) {
 
 function toInfo(doc, id) {
   let info = {}
-  info.pid = id
+  info.pid = id || doc.querySelector('.card_detail_title > p').textContent
   info.timestamp = Date.now()
   info.wxid = doc.querySelector('.card_detail_title > p').textContent
   info.name = doc.querySelector('.card_detail_title > h3').firstChild.textContent
@@ -489,6 +489,15 @@ function toInfo(doc, id) {
 /* fetch */
 function fetchById (tar, i) {
   let url = `http://${domain}/products/wixoss/card/card_detail.php?card_id=${i}`
+  return fetchByUrl(tar, url, i)
+}
+
+function fetchByWXId(tar, wx_id) {
+  let url = `http://${domain}/products/wixoss/card/card_list.php?card=card_detail&card_no=${wx_id}`
+  return fetchByUrl(tar, url, undefined)
+}
+
+function fetchByUrl(tar, url, i) {
   return $fetch(url)
   .then(res => res.text())
   .then(html => {
@@ -530,6 +539,21 @@ function fetchRange(min, max) {
   })
 }
 
+// fetchWXBox("WDK02", 1, 20)
+function fetchWXBox(prefix, min, max) {
+  let tar = new Tar()
+  let promises = []
+  for (let i = min; i <= max; i ++) {
+    const wx_id = `${prefix}-${('00' + i).slice(-3)}`;
+    promises.push(fetchByWXId(tar, wx_id))
+  }
+  return Promise.all(promises)
+  .then(() => {
+    let name = ('000' + min).slice(-4) + '-' + ('000' + max).slice(-4)
+    downloadTar(tar, name)
+  })
+}
+
 function downloadTar(tar, name) {
   let blob = new Blob([tar.out], { type: 'application/octet-stream' })
   let url = URL.createObjectURL(blob)
@@ -540,8 +564,8 @@ function downloadTar(tar, name) {
 }
 
 window.fetchRange = fetchRange
+window.fetchWXBox = fetchWXBox
 
 },{"tar-js":2}]},{},[4])
-
 
 //# sourceMappingURL=index.js.map
